@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Check, ChevronLeft, Sprout, MapPin, Wheat, Ruler } from "lucide-react";
+import { Check, ChevronLeft, Sprout, MapPin, Wheat, Ruler, Globe } from "lucide-react";
+import { indianStatesAndDistricts } from "@/lib/indian-data";
 
 export const Route = createFileRoute("/onboarding")({
   head: () => ({
@@ -16,15 +17,8 @@ export const Route = createFileRoute("/onboarding")({
   component: OnboardingPage,
 });
 
-const states = ["Madhya Pradesh", "Maharashtra", "Uttar Pradesh", "Punjab", "Bihar", "Karnataka"];
-const districts: Record<string, string[]> = {
-  "Madhya Pradesh": ["Vidisha", "Bhopal", "Sehore", "Raisen", "Hoshangabad"],
-  Maharashtra: ["Nashik", "Pune", "Aurangabad", "Nagpur"],
-  "Uttar Pradesh": ["Lucknow", "Kanpur", "Varanasi", "Meerut"],
-  Punjab: ["Ludhiana", "Amritsar", "Patiala"],
-  Bihar: ["Patna", "Gaya", "Muzaffarpur"],
-  Karnataka: ["Bengaluru Rural", "Mysuru", "Belagavi"],
-};
+const states = Object.keys(indianStatesAndDistricts);
+
 const crops = [
   { en: "Wheat", hi: "गेहूँ" },
   { en: "Rice", hi: "चावल" },
@@ -38,7 +32,8 @@ const crops = [
 
 const steps = [
   { icon: Sprout, en: "Aadhaar", hi: "आधार" },
-  { icon: MapPin, en: "District", hi: "ज़िला" },
+  { icon: Globe, en: "Language", hi: "भाषा" },
+  { icon: MapPin, en: "Location", hi: "स्थान" },
   { icon: Wheat, en: "Crops", hi: "फसल" },
   { icon: Ruler, en: "Land", hi: "ज़मीन" },
   { icon: Check, en: "Confirm", hi: "पुष्टि" },
@@ -49,8 +44,10 @@ function OnboardingPage() {
   const [step, setStep] = useState(0);
   const [aadhaar, setAadhaar] = useState("");
   const [name, setName] = useState("Ramesh Kumar");
+  const [language, setLanguage] = useState("English");
   const [state, setState] = useState("Madhya Pradesh");
-  const [district, setDistrict] = useState("Vidisha");
+  // Default to first district of default state
+  const [district, setDistrict] = useState(indianStatesAndDistricts["Madhya Pradesh"][0]);
   const [primary, setPrimary] = useState("Wheat");
   const [secondary, setSecondary] = useState("Soybean");
   const [acres, setAcres] = useState(2.5);
@@ -65,10 +62,11 @@ function OnboardingPage() {
 
   const canNext =
     (step === 0 && aadhaar.replace(/\D/g, "").length === 12 && name.trim().length > 1) ||
-    (step === 1 && state && district) ||
-    (step === 2 && primary) ||
-    (step === 3 && acres > 0) ||
-    step === 4;
+    (step === 1 && language) ||
+    (step === 2 && state && district) ||
+    (step === 3 && primary) ||
+    (step === 4 && acres > 0) ||
+    step === 5;
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -140,9 +138,12 @@ function OnboardingPage() {
             <h2 className="text-2xl font-bold text-foreground leading-tight">
               {steps[step].en}
             </h2>
-            <p lang="hi" className="font-hi text-sm text-muted-foreground">
-              {steps[step].hi}
-            </p>
+            {/* The language step's label in Hindi is rendered similarly to the others */}
+            {steps[step].hi && (
+              <p lang="hi" className="font-hi text-sm text-muted-foreground">
+                {steps[step].hi}
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -180,45 +181,92 @@ function OnboardingPage() {
 
         {step === 1 && (
           <div className="space-y-4">
-            <FieldLabel en="State" hi="राज्य" />
-            <div className="grid grid-cols-2 gap-2">
-              {states.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => {
-                    setState(s);
-                    setDistrict(districts[s][0]);
-                  }}
-                  className={`px-4 py-3 rounded-2xl text-sm font-medium text-left border transition ${
-                    state === s
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "bg-white border-border text-foreground"
-                  }`}
-                >
-                  {s}
-                </button>
-              ))}
+            <div className="mb-2">
+              <div className="text-sm font-semibold text-foreground">Preferred language</div>
+              <div className="text-sm text-muted-foreground">We'll show the app in this language after sign up.</div>
             </div>
-            <FieldLabel en="District" hi="ज़िला" />
-            <div className="flex flex-wrap gap-2">
-              {districts[state]?.map((d) => (
-                <button
-                  key={d}
-                  onClick={() => setDistrict(d)}
-                  className={`px-4 py-2.5 rounded-full text-sm border transition ${
-                    district === d
-                      ? "bg-ink text-ink-foreground border-ink"
-                      : "bg-white border-border text-foreground"
-                  }`}
-                >
-                  {d}
-                </button>
-              ))}
+            
+            <div className="grid grid-cols-2 gap-4">
+              <button
+                onClick={() => setLanguage("English")}
+                className={`flex flex-col p-5 rounded-3xl border transition text-left h-28 ${
+                  language === "English"
+                    ? "bg-primary-soft border-primary"
+                    : "bg-white border-border"
+                }`}
+              >
+                <span className="text-lg font-bold text-foreground mb-1">English</span>
+                <span className="text-sm text-muted-foreground">English</span>
+              </button>
+              
+              <button
+                onClick={() => setLanguage("Hindi")}
+                className={`flex flex-col p-5 rounded-3xl border transition text-left h-28 ${
+                  language === "Hindi"
+                    ? "bg-primary-soft border-primary"
+                    : "bg-white border-border"
+                }`}
+              >
+                <span className="text-lg font-bold text-foreground mb-1">Hindi</span>
+                <span lang="hi" className="font-hi text-sm text-muted-foreground">हिंदी</span>
+              </button>
             </div>
           </div>
         )}
 
         {step === 2 && (
+          <div className="space-y-6">
+            <div>
+              <FieldLabel en="State" hi="राज्य" />
+              <div className="mt-2 relative">
+                <select
+                  value={state}
+                  onChange={(e) => {
+                    const newState = e.target.value;
+                    setState(newState);
+                    setDistrict(indianStatesAndDistricts[newState][0]);
+                  }}
+                  className="w-full h-14 px-4 rounded-2xl bg-white border border-border text-base text-foreground appearance-none focus:border-primary focus:outline-none"
+                >
+                  {states.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-foreground">
+                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <FieldLabel en="District" hi="ज़िला" />
+              <div className="mt-2 relative">
+                <select
+                  value={district}
+                  onChange={(e) => setDistrict(e.target.value)}
+                  className="w-full h-14 px-4 rounded-2xl bg-white border border-border text-base text-foreground appearance-none focus:border-primary focus:outline-none"
+                >
+                  {indianStatesAndDistricts[state]?.map((d) => (
+                    <option key={d} value={d}>
+                      {d}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-foreground">
+                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {step === 3 && (
           <div className="space-y-4">
             <FieldLabel en="Primary crop" hi="मुख्य फसल" />
             <CropGrid value={primary} onChange={setPrimary} />
@@ -227,7 +275,7 @@ function OnboardingPage() {
           </div>
         )}
 
-        {step === 3 && (
+        {step === 4 && (
           <div className="space-y-6">
             <FieldLabel en="Land area (acres)" hi="ज़मीन (एकड़)" />
             <div className="rounded-3xl bg-white p-6 border border-border shadow-soft">
@@ -259,10 +307,11 @@ function OnboardingPage() {
           </div>
         )}
 
-        {step === 4 && (
+        {step === 5 && (
           <div className="space-y-3">
             <Summary label="Name" hi="नाम" value={name} />
             <Summary label="Aadhaar" hi="आधार" value={aadhaarMasked} />
+            <Summary label="Language" hi="भाषा" value={language} />
             <Summary label="District" hi="ज़िला" value={`${district}, ${state}`} />
             <Summary label="Primary crop" hi="मुख्य फसल" value={primary} />
             {secondary && <Summary label="Secondary crop" hi="दूसरी फसल" value={secondary} />}
