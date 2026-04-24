@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, AlertTriangle, BarChart3, Map, FileText, LogOut } from "lucide-react";
+import { LayoutDashboard, Users, AlertTriangle, BarChart3, LogOut } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
@@ -17,8 +17,6 @@ const mainBase = [
   { title: "Applications",  url: "/dashboard/applications", icon: Users },
   { title: "Distress Alerts", url: "/dashboard/distress",   icon: AlertTriangle, badge: 0 },
   { title: "Analytics",     url: "/dashboard/analytics",    icon: BarChart3 },
-  { title: "Map View",      url: "/dashboard/map",          icon: Map },
-  { title: "Reports",       url: "/dashboard/reports",      icon: FileText },
 ];
 
 export function AppSidebar() {
@@ -93,21 +91,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarGroup className="mt-auto">
-          {!collapsed && <SidebarGroupLabel className="text-sidebar-foreground/60">Account</SidebarGroupLabel>}
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton onClick={handleLogout} className="h-10">
-                  <div className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground">
-                    <LogOut className="h-4 w-4 shrink-0" />
-                    {!collapsed && <span>Log out</span>}
-                  </div>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border p-3">
