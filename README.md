@@ -73,11 +73,11 @@ Open **Terminal 2**:
 ```powershell
 cd farmer-app-src\farmer-s-bloom-ui-main
 npm install
-npm run dev -- --port 8080
+npm run dev -- --port 8083
 ```
-*The Farmer App will be running on `http://localhost:8080`*
+*The Farmer App will be running on `http://localhost:8083`*
 
-* **Testing Flow**: Click 'Get Started'. Enter an arbitrary Aadhaar number (e.g. `999988887777`) and fill out the rest of the form to generate a live score against the `localhost:8000` API. Wait ~12 seconds for the ML pipeline mock simulation to finish.
+* **Testing Flow**: Click 'Get Started'. Enter an arbitrary Aadhaar number (e.g. `999988887777`) and fill out the rest of the form to generate a live score against the `localhost:8002` API. Wait ~12 seconds for the ML pipeline mock simulation to finish.
 
 ### 3. Start the Bank Dashboard
 
