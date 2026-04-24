@@ -74,18 +74,7 @@ function SplashPage() {
               · शुरू करें
             </span>
           </Link>
-          <Link
-            to="/dashboard"
-            className="
-              w-full flex items-center justify-center gap-2 rounded-full
-              bg-white/15 backdrop-blur-md border border-white/25
-              text-white py-4 px-6 font-medium
-              hover:bg-white/25 transition
-            "
-          >
-            <Globe2 className="h-4 w-4" />
-            Demo dashboard
-          </Link>
+
           <p className="text-center text-xs text-white/70 mt-2">
             Made with care · Team Utkarsh
           </p>

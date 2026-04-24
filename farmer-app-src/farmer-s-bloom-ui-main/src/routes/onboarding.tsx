@@ -188,7 +188,11 @@ function OnboardingPage() {
             
             <div className="grid grid-cols-2 gap-4">
               <button
-                onClick={() => setLanguage("English")}
+                onClick={() => {
+                  setLanguage("English");
+                  document.documentElement.lang = "en";
+                  localStorage.setItem("kk_farmer_lang", "English");
+                }}
                 className={`flex flex-col p-5 rounded-3xl border transition text-left h-28 ${
                   language === "English"
                     ? "bg-primary-soft border-primary"
@@ -200,7 +204,11 @@ function OnboardingPage() {
               </button>
               
               <button
-                onClick={() => setLanguage("Hindi")}
+                onClick={() => {
+                  setLanguage("Hindi");
+                  document.documentElement.lang = "hi";
+                  localStorage.setItem("kk_farmer_lang", "Hindi");
+                }}
                 className={`flex flex-col p-5 rounded-3xl border transition text-left h-28 ${
                   language === "Hindi"
                     ? "bg-primary-soft border-primary"
@@ -209,6 +217,22 @@ function OnboardingPage() {
               >
                 <span className="text-lg font-bold text-foreground mb-1">Hindi</span>
                 <span lang="hi" className="font-hi text-sm text-muted-foreground">हिंदी</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setLanguage("Kannada");
+                  document.documentElement.lang = "kn";
+                  localStorage.setItem("kk_farmer_lang", "Kannada");
+                }}
+                className={`flex flex-col p-5 rounded-3xl border transition text-left h-28 ${
+                  language === "Kannada"
+                    ? "bg-primary-soft border-primary"
+                    : "bg-white border-border"
+                }`}
+              >
+                <span className="text-lg font-bold text-foreground mb-1">Kannada</span>
+                <span lang="kn" className="text-sm text-muted-foreground">ಕನ್ನಡ</span>
               </button>
             </div>
           </div>

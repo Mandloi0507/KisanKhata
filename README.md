@@ -63,7 +63,7 @@ OPENWEATHER_API_KEY=mock
 
 **Start the FastAPI server:**
 ```powershell
-uvicorn app.main:app --reload
+uvicorn app.main:app --reload --port 8002
 ```
 *The backend will now be running on `http://localhost:8002`*
 
@@ -85,9 +85,9 @@ Open **Terminal 3**:
 ```powershell
 cd bank-dashboard-src\swift-loan-vision-main
 npm install
-npm run dev -- --port 8081
+npm run dev -- --port 8085
 ```
-*The Bank Dashboard will be running on `http://localhost:8081`*
+*The Bank Dashboard will be running on `http://localhost:8085`*
 
 * **Login Credentials**:
   * Email: `priya.sharma@ngb.in`
@@ -100,3 +100,18 @@ npm run dev -- --port 8081
 * **Explainable AI (XAI)**: SHAP factors actively display the *Why* behind every score generation.
 * **PII Encryption**: Encrypted payload storage for Aadhaar numbers.
 * **Authentication**: Real JWT authentication across boundaries with role-based segregation.
+
+## Recent UI & Workflow Updates
+
+* **Farmer App Enhancements**:
+  * Added functional "Score" and "Loans" tabs to the History page.
+  * Overhauled onboarding flow to include a dynamic English/Hindi/Kannada language selector.
+  * Replaced manual text inputs with comprehensive State & District dropdowns (powered by `indian-data.ts`).
+  * Implemented a working Session Sign Out and functional in-app Language Toggle in the Profile view.
+  * Streamlined the landing screen by removing the Demo Dashboard link.
+* **Bank Dashboard Refinements**:
+  * Cleaned up the side navigation by removing "Reports" and "Map View".
+  * Simplified the bottom Account menu by removing the redundant text "Log out" button while retaining the primary profile logout icon.
+* **Infrastructure**:
+  * Fixed frontend Vite configuration preventing proper dev server startups (PostCSS import order).
+  * Synced backend `.env` CORS settings to correctly allow the `8083` and `8085` dev ports.

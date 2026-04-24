@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
 import {
   ChevronRight,
   Globe2,
@@ -29,6 +30,30 @@ export const Route = createFileRoute("/profile")({
 });
 
 function Profile() {
+  const navigate = useNavigate();
+  const [lang, setLang] = useState("English");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("kk_farmer_lang");
+    if (saved) setLang(saved);
+  }, []);
+
+  const handleSignOut = () => {
+    localStorage.removeItem("kk_farmer_id");
+    navigate({ to: "/" });
+  };
+
+  const toggleLanguage = () => {
+    let nextLang = "English";
+    let docLang = "en";
+    if (lang === "English") { nextLang = "Hindi"; docLang = "hi"; }
+    else if (lang === "Hindi") { nextLang = "Kannada"; docLang = "kn"; }
+    
+    setLang(nextLang);
+    document.documentElement.lang = docLang;
+    localStorage.setItem("kk_farmer_lang", nextLang);
+  };
+
   return (
     <div className="min-h-full flex flex-col bg-surface-soft">
       <ScreenHeader title="Profile" titleHi="प्रोफ़ाइल" />
@@ -82,13 +107,19 @@ function Profile() {
 
         {/* Settings */}
         <div className="rounded-2xl bg-white border border-border divide-y divide-border">
-          <Action icon={Globe2} label="Language" hi="भाषा" trailing="EN · हिं" />
+          <Action 
+            icon={Globe2} 
+            label="Language" 
+            hi="भाषा" 
+            trailing={lang === "English" ? "EN" : lang === "Hindi" ? "हिं" : "ಕನ್ನಡ"} 
+            onClick={toggleLanguage} 
+          />
           <Link to="/notifications">
             <Action icon={Bell} label="Notifications" hi="सूचनाएँ" trailing="4 new" />
           </Link>
           <Action icon={Shield} label="Privacy & data" hi="गोपनीयता" />
           <Action icon={HelpCircle} label="Help & support" hi="सहायता" />
-          <Action icon={LogOut} label="Sign out" hi="लॉग आउट" danger />
+          <Action icon={LogOut} label="Sign out" hi="लॉग आउट" danger onClick={handleSignOut} />
         </div>
 
         <p className="text-center text-[11px] text-muted-foreground">
@@ -133,15 +164,18 @@ function Action({
   hi,
   trailing,
   danger,
+  onClick,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   hi: string;
   trailing?: string;
   danger?: boolean;
+  onClick?: () => void;
 }) {
   return (
     <button
+      onClick={onClick}
       className={`w-full flex items-center gap-3 px-4 py-3.5 text-left ${
         danger ? "text-danger" : "text-foreground"
       }`}
